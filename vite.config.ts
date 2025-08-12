@@ -10,12 +10,6 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  // Debugging and error reporting
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(mode),
-    '__DEV__': JSON.stringify(mode === 'development'),
-    '__BUILD_DATE__': JSON.stringify(new Date().toISOString()),
-  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
