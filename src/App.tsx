@@ -16,14 +16,31 @@ import DataPaud from "./pages/DataPaud";
 import GaleriDokumentasi from "./pages/GaleriDokumentasi";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 2,
+    },
+  },
+});
+
+// Get base path for routing in different environments
+const getBasename = () => {
+  // For Plesk or subdirectory deployments
+  const path = window.location.pathname;
+  if (path.includes('/public_html/')) {
+    return path.split('/public_html/')[1].split('/')[0] || '';
+  }
+  return '';
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={getBasename()}>
         <Navbar />
         <Routes>
           <Route path="/" element={<Index />} />
