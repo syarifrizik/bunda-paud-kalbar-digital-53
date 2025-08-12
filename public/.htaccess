@@ -51,14 +51,21 @@ RewriteEngine On
     AddType image/webp .webp
 </IfModule>
 
-# SPA routing - Handle all routes through index.html
+# SPA routing - Handle all routes through index.html with enhanced Plesk support
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !^/api/
-RewriteRule . /index.html [L]
+RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp|pdf)$ [NC]
+RewriteRule ^(.*)$ /index.html [QSA,L]
 
-# Error pages
+# Explicit handling for specific files that might be problematic in Plesk
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.+\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp))$ /$1 [L]
+
+# Error pages with fallback
 ErrorDocument 404 /index.html
+ErrorDocument 403 /index.html
+ErrorDocument 500 /index.html
 
 # Prevent access to sensitive files
 <FilesMatch "\.(env|htaccess|htpasswd|ini|log|sh|inc|bak)$">
